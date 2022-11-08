@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "target": "esnext",
+        "module": "commonjs",
+        "outDir": "lib",
+        "strict": false,
+        "strictPropertyInitialization": false,
+        "baseUrl": "./src",
+        "typeRoots": [
+            "./node_modules/@types",
+            "./src/@types"
+        ],
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true
+    }
+}
