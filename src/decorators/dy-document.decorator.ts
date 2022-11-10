@@ -1,13 +1,13 @@
 import { DecoratorParamsType } from "types/decorator.type";
 import { DyHelperDecorator } from "./utils/decorator-helper.decorators";
 
-export const DySecondaryIndex = (params?: DecoratorParamsType) => {
-  return (target: Function, property: any) => {
+export const DyDocument = (params?: DecoratorParamsType) => {
+  return function (target: Function) {
     DyHelperDecorator.storePropertyMetadata(
-      { type: 'secondary-index' },
-      property,
+      null,
+      null,
       target,
       params
     );
-  }
+  };
 }

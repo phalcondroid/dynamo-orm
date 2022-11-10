@@ -1,17 +1,14 @@
 import 'reflect-metadata';
+import { DecoratorParamsType } from 'types/decorator.type';
+import { DyHelperDecorator } from './utils/decorator-helper.decorators';
 
-export const DyTable = (table?: string) => {
-    return function <T>(target: Function) {
-        let tableName = target.name;
-        if (table !== '' && table !== null && typeof table !== 'undefined') {
-            tableName = table;
-        }
-        Reflect.defineMetadata(
-            `${target.name}_table_name`,
-            {
-                'table_name': tableName
-            },
-            target
-        );
-    };
+export const DyTable = (params?: DecoratorParamsType) => {
+  return function (target: Function) {
+    DyHelperDecorator.storePropertyMetadata(
+      null,
+      null,
+      target,
+      params
+    );
+  };
 }
