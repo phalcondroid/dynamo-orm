@@ -26,17 +26,17 @@ export class DyHelperDecorator {
   public static storePropertyMetadata(
     type: object = null,
     property: string = null,
-    target: Function,
+    target: Object,
     params: DecoratorParamsType,
   ): void {
-    let tableName = DyHelperDecorator.getTableName(target, params?.tableName);
-    let oldMetaData = Reflect.getMetadata('__meta__', target);
+    let tableName = DyHelperDecorator.getTableName(target.constructor, params?.tableName);
+    let oldMetaData = Reflect.getMetadata('__meta__', target.constructor);
     let newMetaData = {};
-    let indexTableName = 'tableName';
+    let indexTableName = '__tableName__';
 
     if (params?.subDocument && params?.subDocument !== '') {
-      indexTableName = 'subDocument';
-      tableName = DyHelperDecorator.getTableName(target, params?.subDocument);
+      indexTableName = '__subDocument__';
+      tableName = DyHelperDecorator.getTableName(target.constructor, params?.subDocument);
     }
 
     if (typeof oldMetaData === 'undefined') {
@@ -45,22 +45,20 @@ export class DyHelperDecorator {
         oldMetaData[indexTableName] = tableName;
         newMetaData = oldMetaData;
     }
-
+  
     if (property !== null) {
+      if (typeof newMetaData['__properties__'] === 'undefined') {
+        newMetaData['__properties__'] = [];
+      }
       newMetaData[property] = { ...type };
       if (params?.column && params?.column !== '') {
         newMetaData[property].column = params?.column;
+        newMetaData['__properties__'].push(params?.column);
+      } else {
+        newMetaData['__properties__'].push(property);
       }
     }
 
-    if (typeof newMetaData['__properties__'] === 'undefined') {
-      newMetaData['__properties__'] = [];
-    }
-    if (property) {
-      newMetaData['__properties__'].push(property);
-    }
-
-    console.log('metaStored', newMetaData);
-    Reflect.defineMetadata('__meta__', newMetaData, target);
+    Reflect.defineMetadata('__meta__', newMetaData, target.constructor);
   }
 }

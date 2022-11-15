@@ -1,13 +1,37 @@
 import { User, Client } from "./user.table";
+import Aws from 'aws-sdk';
+import DynamoDB, { AttributeValue } from 'aws-sdk/clients/dynamodb';
+import { DyManager } from "../dy-manager";
 
-import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-// Set the AWS Region.
-const REGION = 'REGION'; // e.g. "us-east-1"
-// Create an Amazon DynamoDB service client object.
-const dynamoDbClient = new DynamoDBClient({ region: REGION });
+// Connection
+const dynamo = new Aws.DynamoDB({
+  region: 'local',
+  endpoint: 'http://localhost:8000',
+});
 
-const user = new User();
+// console.log('conn', dynamo);
 
-console.log('--->', typeof user, ' <--> ', typeof User);
+// Dynamo manager instance
+const manager = new DyManager();
+manager.setClient(dynamo);
 
-// console.log('instance.client', Reflect.getMetadata('__meta__', Client));
+(async () => {
+
+  const user2 = new User();
+  user2.userName = 'Username 2';
+  user2.identify = 1016;
+  user2.exist = true;
+
+  const client = new Client();
+  client.clientId = '2';
+  client.clientName = 'Test1';
+  client.phone = 301273;
+  client.active = true;
+  client.user = user2;
+  client.userList = [user2];
+
+  await manager.save(client);
+
+  const clientResult = await manager.findOne<Client>(Client, { 'clientId': 2 });
+  console.log('client result: ', clientResult);
+})();

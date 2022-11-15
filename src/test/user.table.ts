@@ -8,37 +8,39 @@ import { DyNumber } from '../decorators/dy-number.decorator';
 import { DyBoolean } from '../decorators/dy-boolean.decorator';
 import { DyCollection } from '../decorators/dy-collection.decorator';
 
-@DyDocument({
-    tableName: 'no_doc'
-})
+@DyDocument()
 export class User {
     @DyNumber()
-    public static identify: number;
+    public identify: number;
 
     @DyString()
-    public static userName: string;
+    public userName: string;
 
     @DyBoolean()
-    public static exist: boolean;
+    public exist: boolean;
 }
 
-@DyTable({
-    tableName: 'client_table'
-})
+@DyTable()
 export class Client {
     @DyIndex()
-    public static clientId: string;
+    public clientId: string;
 
     @DyString()
-    public static clientName: string;
+    public clientName: string;
+
+    @DyNumber()
+    public phone: number;
+    
+    @DyBoolean()
+    public active: boolean;
 
     @DyMap({
         reference: User
     })
-    public static user: User;
+    public user: User;
 
     @DyCollection({
         reference: User
     })
-    public static userList: User[];
+    public userList: User[];
 }
